@@ -1,12 +1,11 @@
 import puppeteer from "puppeteer";
-import fs from "fs";
-
 import path from "path";
 import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-function escapeHtml(v) {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
+
+function esc(v) {
   const s = String(v ?? "");
   return s
     .replaceAll("&", "&amp;")
@@ -18,283 +17,405 @@ function escapeHtml(v) {
 
 function formatDate(dt) {
   try {
-    return new Date(dt).toLocaleString();
-  } catch {
-    return String(dt ?? "");
-  }
+    return new Date(dt).toLocaleDateString("en-US", {
+      year: "numeric", month: "long", day: "numeric"
+    });
+  } catch { return String(dt ?? ""); }
 }
 
-function field(label, value) {
+// Single field row — label left, value right
+function row(label, value) {
+  const val = esc(value || "—");
   return `
-    <div class="row">
-      <div class="row-label">${escapeHtml(label)}</div>
-      <div class="row-value">${escapeHtml(value || "")}</div>
-    </div>
+    <tr>
+      <td class="f-label">${esc(label)}</td>
+      <td class="f-value">${val}</td>
+    </tr>
   `;
 }
 
+// Section with teal accent bar
 function section(title, bodyHtml) {
   return `
     <div class="section">
-      <div class="section-title">${escapeHtml(title)}</div>
+      <div class="section-head">
+        <div class="section-accent"></div>
+        <span class="section-title">${esc(title)}</span>
+      </div>
       <div class="section-body">${bodyHtml}</div>
     </div>
   `;
 }
 
-function buildHtml(data) {
-
-    const logoPath = path.join(__dirname, "../assets/seacap-logo.svg");
-
-const headerLogo = `
-<img class="logo" src="file://${logoPath}" alt="Seacap Logo" />
-`;
-
-  const termsText = process.env.PDF_TERMS_TEXT || "PASTE_TERMS_LATER";
-  console.log("PDF_TERMS_TEXT:", process.env.PDF_TERMS_TEXT);
-  const createdAt = formatDate(data.createdAt);
-
-  const businessGrid = `
-    <div class="grid">
-      ${field("Business Name", data.business.businessName)}
-      ${field("DBA", data.business.dba)}
-      ${field("Address", data.business.address)}
-      ${field("City", data.business.city)}
-      ${field("State", data.business.state)}
-      ${field("Zip", data.business.zip)}
-      ${field("EIN", data.business.ein)}
-      ${field("Website", data.business.website)}
-      ${field("Business Start Date", data.business.startDate)}
-    </div>
-  `;
-
-  const ownerGrid = `
-    <div class="grid">
-      ${field("Owner Name", data.owner.ownerName)}
-      ${field("Title", data.owner.ownerTitle)}
-      ${field("Ownership %", data.owner.ownership)}
-      ${field("FICO", data.owner.fico)}
-      ${field("Owner Address", data.owner.ownerAddress)}
-      ${field("Owner City", data.owner.ownerCity)}
-      ${field("Owner State", data.owner.ownerState)}
-      ${field("Owner Zip", data.owner.ownerZip)}
-      ${field("DOB", data.owner.dob)}
-      ${field("SSN (Last 4)", data.owner.ssnLast4)}
-    </div>
-  `;
-
-  
-  const partnerGrid = `
-    <div class="grid">
-      ${field("Partner Name", data.partner.partnerName)}
-      ${field("Title", data.partner.partnerTitle)}
-      ${field("Ownership %", data.partner.partnerOwnership)}
-      ${field("Partner DOB", data.partner.partnerDOB)}
-      ${field("Partner SSN (Last 4)", data.partner.partnerSSNLast4)}
-    </div>
-  `;
-  const partnerSection =
-  Number(data.owner.ownership) < 51
-    ? section("Partner Information", partnerGrid)
-    : "";
-
-  const signatureBlock = `
-    <div class="signature-box">
-      <div class="signature-line"></div>
-      <div class="signature-label">Authorized Signature</div>
-
-      <div class="signature-row">
-        <div>
-          <div class="line"></div>
-          <div class="line-label">Printed Name</div>
-        </div>
-
-        <div>
-          <div class="line"></div>
-          <div class="line-label">Date</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="terms">
-      <div class="terms-title">Terms & Conditions</div>
-      <div class="terms-text">${escapeHtml(termsText)}</div>
-    </div>
-  `;
-
-  return `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8" />
-        <title>Seacap Funding Application</title>
-
-        <style>
-          @page {
-            size: A4;
-            margin: 18mm;
-          }
-
-          body {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 12px;
-            color: #111;
-          }
-
-          .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 18px;
-          }
-
-          .logo {
-  height: 40px;
-  width: auto;
+// Two-column table of fields
+function twoColTable(fields) {
+  // fields = array of {label, value}
+  // pair them up into rows of 2
+  const rows = []
+  for (let i = 0; i < fields.length; i += 2) {
+    const a = fields[i]
+    const b = fields[i + 1]
+    rows.push(`
+      <tr>
+        <td class="f-label">${esc(a.label)}</td>
+        <td class="f-value">${esc(a.value || "—")}</td>
+        ${b ? `<td class="f-label">${esc(b.label)}</td><td class="f-value">${esc(b.value || "—")}</td>` : `<td></td><td></td>`}
+      </tr>
+    `)
+  }
+  return `<table class="fields-table">${rows.join("")}</table>`
 }
 
-          .logo-text {
-            font-size: 24px;
-            font-weight: 700;
-          }
+function buildHtml(data) {
+  const logoPath   = path.join(__dirname, "../assets/seacap-logo.svg");
+  const logoSrc    = `file://${logoPath}`;
+  const termsText  = process.env.PDF_TERMS_TEXT || "";
+  const createdAt  = formatDate(data.createdAt);
+  const hasPartner = Number(data.owner.ownership) < 51;
 
-          .title-wrap {
-            text-align: right;
-          }
+  // ── Business fields
+  const businessFields = [
+    { label: "Legal Company Name",   value: data.business.businessName },
+    { label: "Doing Business As",    value: data.business.dba },
+    { label: "Address",              value: data.business.address },
+    { label: "City",                 value: data.business.city },
+    { label: "State",                value: data.business.state },
+    { label: "Zip",                  value: data.business.zip },
+    { label: "Tax ID / EIN",         value: data.business.ein },
+    { label: "Website",              value: data.business.website },
+    { label: "Business Start Date",  value: data.business.startDate },
+    { label: "Advance Requested",    value: data.business.advanceAmount ? `$${Number(data.business.advanceAmount).toLocaleString()}` : "" },
+  ]
 
-          .title {
-            font-size: 22px;
-            font-weight: 700;
-          }
+  // ── Owner fields
+  const ownerFields = [
+    { label: "Full Name",        value: data.owner.ownerName },
+    { label: "Title",            value: data.owner.ownerTitle },
+    { label: "Ownership %",      value: data.owner.ownership ? `${data.owner.ownership}%` : "" },
+    { label: "FICO Score",       value: data.owner.fico },
+    { label: "Address",          value: data.owner.ownerAddress },
+    { label: "City",             value: data.owner.ownerCity },
+    { label: "State",            value: data.owner.ownerState },
+    { label: "Zip",              value: data.owner.ownerZip },
+    { label: "Date of Birth",    value: data.owner.dob },
+    { label: "SSN (Last 4)",     value: data.owner.ssnLast4 ? `···· ${data.owner.ssnLast4}` : "" },
+  ]
 
-          .meta {
-            font-size: 11px;
-            margin-top: 4px;
-          }
+  // ── Partner fields
+  const partnerFields = hasPartner ? [
+    { label: "Partner Name",     value: data.partner.partnerName },
+    { label: "Title",            value: data.partner.partnerTitle },
+    { label: "Ownership %",      value: data.partner.partnerOwnership ? `${data.partner.partnerOwnership}%` : "" },
+    { label: "Date of Birth",    value: data.partner.partnerDOB },
+    { label: "SSN (Last 4)",     value: data.partner.partnerSSNLast4 ? `···· ${data.partner.partnerSSNLast4}` : "" },
+  ] : []
 
-          .section {
-            margin-top: 16px;
-          }
+  // ── Signature image (base64 from canvas)
+  const sigImg = data.signature?.applicant
+    ? `<img src="${data.signature.applicant}" class="sig-img" alt="Signature" />`
+    : `<div class="sig-empty">No signature captured</div>`
 
-          .section-title {
-            font-weight: 700;
-            background: #f1f1f1;
-            border: 1px solid #000;
-            padding: 8px 10px;
-          }
+  const partnerSigImg = hasPartner && data.signature?.partner
+    ? `<img src="${data.signature.partner}" class="sig-img" alt="Partner Signature" />`
+    : hasPartner ? `<div class="sig-empty">No signature captured</div>` : ""
 
-          .section-body {
-            border: 1px solid #000;
-            border-top: none;
-            padding: 12px;
-          }
+  const sigDate = data.signature?.signatureDate
+    ? formatDate(data.signature.signatureDate)
+    : formatDate(new Date())
 
-          .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px 20px;
-          }
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Seacap Funding Application — ${esc(data.applicationNumber)}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 
-          .row {
-            display: flex;
-            border-bottom: 1px solid #ddd;
-            padding: 4px 0;
-          }
+    @page {
+      size: A4;
+      margin: 14mm 16mm;
+    }
 
-          .row-label {
-            width: 45%;
-            font-weight: 600;
-            color: #333;
-          }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-          .row-value {
-            width: 55%;
-          }
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 11px;
+      color: #1a1a1a;
+      background: #fff;
+      line-height: 1.5;
+    }
 
-          .signature-box {
-            margin-top: 20px;
-          }
+    /* ── Header ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #195455;
+    }
 
-          .signature-line {
-            border-bottom: 2px solid #000;
-            height: 30px;
-          }
+    .logo { height: 36px; width: auto; }
 
-          .signature-label {
-            font-size: 11px;
-            margin-top: 4px;
-            margin-bottom: 18px;
-          }
+    .header-right { text-align: right; }
 
-          .signature-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-          }
+    .header-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #195455;
+      letter-spacing: -0.3px;
+    }
 
-          .line {
-            border-bottom: 1px solid #000;
-            height: 20px;
-          }
+    .header-meta {
+      font-size: 10px;
+      color: #648F89;
+      margin-top: 3px;
+    }
 
-          .line-label {
-            font-size: 11px;
-            margin-top: 4px;
-          }
+    .header-meta span { font-weight: 600; color: #0D2223; }
 
-          .terms {
-            margin-top: 20px;
-            border: 1px solid #000;
-          }
+    /* ── Intro line ── */
+    .intro {
+      font-size: 10.5px;
+      color: #648F89;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #E8EDEC;
+    }
 
-          .terms-title {
-            background: #f1f1f1;
-            padding: 8px 10px;
-            font-weight: 700;
-            border-bottom: 1px solid #000;
-          }
+    /* ── Two-column layout for Business + Owner ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
 
-          .terms-text {
-            padding: 10px;
-            font-size: 9px;
-            line-height: 1.3;
-            white-space: pre-wrap;
-          }
+    /* ── Section ── */
+    .section {
+      margin-bottom: 14px;
+    }
 
-          .footer-note {
-            margin-top: 16px;
-            font-size: 10px;
-            color: #555;
-          }
-        </style>
-      </head>
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
 
-      <body>
-        <div class="header">
-          <div>${headerLogo}</div>
+    .section-accent {
+      width: 3px;
+      height: 14px;
+      background-color: #195455;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
 
-          <div class="title-wrap">
-            <div class="title">Funding Application</div>
-            <div class="meta">
-              <div><b>Application #:</b> ${escapeHtml(data.applicationNumber)}</div>
-              <div><b>Created:</b> ${escapeHtml(createdAt)}</div>
-            </div>
-          </div>
+    .section-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #195455;
+    }
+
+    /* ── Fields table ── */
+    .fields-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .fields-table tr {
+      border-bottom: 1px solid #EEF2F2;
+    }
+
+    .fields-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .f-label {
+      font-size: 9.5px;
+      font-weight: 500;
+      color: #648F89;
+      padding: 5px 10px 5px 0;
+      width: 26%;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+
+    .f-value {
+      font-size: 10.5px;
+      font-weight: 400;
+      color: #0D2223;
+      padding: 5px 16px 5px 0;
+      width: 24%;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #E8EDEC;
+      margin: 14px 0;
+    }
+
+    /* ── Signature section ── */
+    .sig-section {
+      margin-bottom: 14px;
+    }
+
+    .sig-grid {
+      display: grid;
+      grid-template-columns: ${hasPartner ? "1fr 1fr" : "1fr"};
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .sig-box {
+      border: 1px solid #E0E6E5;
+      border-radius: 6px;
+      padding: 10px 12px;
+      background: #FAFCFC;
+    }
+
+    .sig-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8A9E9C;
+      margin-bottom: 6px;
+    }
+
+    .sig-img {
+      width: 100%;
+      max-height: 60px;
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    .sig-empty {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      font-size: 10px;
+      color: #C7D8CD;
+      font-style: italic;
+    }
+
+    .sig-date {
+      font-size: 9.5px;
+      color: #648F89;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid #E8EDEC;
+    }
+
+    .sig-date span { font-weight: 600; color: #0D2223; }
+
+    /* ── Terms ── */
+    .terms-section {
+      margin-top: 14px;
+    }
+
+    .terms-body {
+      font-size: 8.5px;
+      color: #648F89;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      padding: 10px 12px;
+      background: #F7FAFA;
+      border: 1px solid #E8EDEC;
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 8px 16mm;
+      border-top: 1px solid #E8EDEC;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8.5px;
+      color: #B0BBBA;
+      background: #fff;
+    }
+
+    .footer-brand { font-weight: 600; color: #195455; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <img class="logo" src="${logoSrc}" alt="Seacap" />
+    <div class="header-right">
+      <div class="header-title">Funding Application</div>
+      <div class="header-meta">
+        Application #: <span>${esc(data.applicationNumber)}</span>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        Date: <span>${createdAt}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro">
+    Thank you for placing your trust in Seacap. Please review the information below carefully before signing.
+  </div>
+
+  <!-- Business + Owner side by side -->
+  <div class="two-col">
+    ${section("Business Information", twoColTable(businessFields))}
+    ${section("Owner Information", twoColTable(ownerFields))}
+  </div>
+
+  <!-- Partner (conditional) -->
+  ${hasPartner ? section("Partner Information", twoColTable(partnerFields)) : ""}
+
+  <hr class="divider" />
+
+  <!-- Terms -->
+  ${termsText ? `
+    <div class="terms-section">
+      ${section("Terms of Use", `<div class="terms-body">${esc(termsText)}</div>`)}
+    </div>
+    <hr class="divider" />
+  ` : ""}
+
+  <!-- Digital Signatures -->
+  <div class="sig-section">
+    ${section("Digital Signature", `
+      <div class="sig-grid">
+        <div class="sig-box">
+          <div class="sig-label">Applicant Signature</div>
+          ${sigImg}
+          <div class="sig-date">Date: <span>${sigDate}</span></div>
         </div>
+        ${hasPartner ? `
+        <div class="sig-box">
+          <div class="sig-label">Partner Signature</div>
+          ${partnerSigImg}
+          <div class="sig-date">Date: <span>${sigDate}</span></div>
+        </div>` : ""}
+      </div>
+    `)}
+  </div>
 
-        ${section("Business Information", businessGrid)}
-        ${section("Owner Information", ownerGrid)}
-        ${partnerSection}
-        ${section("Terms & Signature", signatureBlock)}
+  <!-- Footer -->
+  <div class="footer">
+    <span class="footer-brand">SEACAP</span>
+    <span>FUNDING APPLICATION</span>
+    <span>Confidential — ${esc(data.applicationNumber)}</span>
+  </div>
 
-        <div class="footer-note">
-          Email and phone numbers are intentionally excluded from this PDF.
-        </div>
-      </body>
-    </html>
-  `;
+</body>
+</html>`
 }
 
 export async function generateApplicationPdfBuffer(data) {
@@ -313,12 +434,7 @@ export async function generateApplicationPdfBuffer(data) {
       format: "A4",
       printBackground: true,
       preferCSSPageSize: true,
-      margin: {
-        top: "18mm",
-        right: "18mm",
-        bottom: "18mm",
-        left: "18mm",
-      },
+      margin: { top: "14mm", right: "16mm", bottom: "18mm", left: "16mm" },
     });
 
     return buffer;

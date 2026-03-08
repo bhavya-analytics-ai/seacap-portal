@@ -293,3 +293,6 @@ The backend currently supports:
 ✔ PDF generation
 ✔ Email delivery
 ✔ Application retrieval endpoints
+
+
+git checkout v1.0-stable
