@@ -1,10 +1,32 @@
-import { ShieldCheck } from "lucide-react"
-
 export default function Stepper({ step }) {
   const steps = ["Business", "Owner", "Partner", "Signature"]
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 32 }}>
+    <div style={{ display: "flex", justifyContent: "center", marginBottom: 48 }}>
+      <style>{`
+        .stepper-connector {
+          width: 110px;
+          height: 2px;
+          border-radius: 2px;
+          margin-top: 8px;
+          margin-left: 8px;
+          margin-right: 8px;
+          margin-bottom: 28px;
+          transition: background-color 0.3s ease;
+          flex-shrink: 0;
+        }
+        .stepper-label {
+          font-family: 'Outfit', sans-serif;
+          font-size: 15px;
+          letter-spacing: 0.01em;
+          white-space: nowrap;
+          transition: color 0.25s ease;
+        }
+        @media (max-width: 600px) {
+          .stepper-connector { width: 40px !important; margin-left: 4px !important; margin-right: 4px !important; }
+          .stepper-label { font-size: 11px !important; }
+        }
+      `}</style>
 
       <div style={{ display: "flex", alignItems: "flex-start" }}>
         {steps.map((label, index) => {
@@ -14,50 +36,51 @@ export default function Stepper({ step }) {
 
           return (
             <div key={label} style={{ display: "flex", alignItems: "flex-start" }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+
                 <div style={{
-                  width:           isActive ? 14 : 10,
-                  height:          isActive ? 14 : 10,
+                  width:           isActive ? 20 : isCompleted ? 20 : 14,
+                  height:          isActive ? 20 : isCompleted ? 20 : 14,
                   borderRadius:    "50%",
                   backgroundColor: isCompleted || isActive ? "#195455" : "#fff",
                   border:          `2px solid ${isCompleted || isActive ? "#195455" : "#C7D8CD"}`,
-                  boxShadow:       isActive ? "0 0 0 4px rgba(25,84,85,0.12)" : "none",
+                  boxShadow:       isActive ? "0 0 0 6px rgba(25,84,85,0.1)" : "none",
                   transition:      "all 0.25s ease",
-                  marginTop:       isActive ? 0 : 2,
-                }} />
-                <span style={{
-                  fontFamily:    "'Outfit', sans-serif",
-                  fontSize:      13,
-                  fontWeight:    isActive ? 600 : 400,
-                  color:         isActive ? "#195455" : isCompleted ? "#648F89" : "#B0BBBA",
-                  whiteSpace:    "nowrap",
-                  transition:    "color 0.25s ease",
+                  marginTop:       isActive ? 0 : isCompleted ? 0 : 3,
+                  display:         "flex",
+                  alignItems:      "center",
+                  justifyContent:  "center",
+                  flexShrink:      0,
                 }}>
+                  {isCompleted && (
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                      <path d="M1 4L3.5 6.5L9 1" stroke="#fff" strokeWidth="1.7"
+                        strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </div>
+
+                <span
+                  className="stepper-label"
+                  style={{
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? "#195455" : isCompleted ? "#648F89" : "#B0BBBA",
+                  }}
+                >
                   {label}
                 </span>
               </div>
 
               {index < steps.length - 1 && (
-                <div style={{
-                  marginTop: 5, marginLeft: 8, marginRight: 8, marginBottom: 24,
-                  width: 100, height: 2, borderRadius: 2,
-                  backgroundColor: step > num ? "#195455" : "#E0E6E5",
-                  transition: "background-color 0.3s ease",
-                }} />
+                <div
+                  className="stepper-connector"
+                  style={{ backgroundColor: step > num ? "#195455" : "#E0E6E5" }}
+                />
               )}
             </div>
           )
         })}
       </div>
-
-      <div style={{
-        display: "flex", alignItems: "center", gap: 5, marginTop: 18,
-        fontFamily: "'Outfit', sans-serif", fontSize: 13, color: "#B0BBBA",
-      }}>
-        <ShieldCheck size={13} strokeWidth={2} color="#B0BBBA" />
-        <span>Safe, Secure &amp; Confidential</span>
-      </div>
-
     </div>
   )
 }

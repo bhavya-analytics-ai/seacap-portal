@@ -25,28 +25,26 @@ body {
   font-family: 'Outfit', sans-serif;
   background-color: #fff;
   color: var(--text-dark);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.6;
 }
 
 h1 {
   font-family: 'Cormorant', serif;
   font-weight: 600;
-  font-size: 40px;
+  font-size: 46px;
   letter-spacing: -0.01em;
   color: var(--text-dark);
   line-height: 1.15;
 }
 
-/* ─────────────────────────────────────────
-   FLOATING LABEL — notch/cut-through style
-   ───────────────────────────────────────── */
+/* ── FLOATING LABEL ── */
 .float-field {
   position: relative;
   width: 100%;
+  min-width: 0;
 }
 
-/* The input itself */
 .float-field input,
 .float-field select,
 .float-field textarea {
@@ -54,7 +52,7 @@ h1 {
   background-color: #fff;
   border: 1.5px solid var(--border);
   border-radius: 8px;
-  padding: 14px 14px;
+  padding: 16px 12px;
   font-family: 'Outfit', sans-serif;
   font-size: 15px;
   font-weight: 400;
@@ -63,12 +61,15 @@ h1 {
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
   -webkit-appearance: none;
   appearance: none;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .float-field textarea {
   resize: none;
-  height: 52px;        /* same visual height as other inputs */
-  padding-top: 14px;
+  height: 56px;
+  padding-top: 16px;
   overflow: hidden;
 }
 
@@ -79,34 +80,38 @@ h1 {
   box-shadow: 0 0 0 3px rgba(25, 84, 85, 0.08);
 }
 
-/* The floating label */
+/* native date keeps browser blue */
+.float-field input[type="date"] {
+  color: unset;
+  -webkit-appearance: auto;
+  appearance: auto;
+}
+
 .float-field label {
   position: absolute;
-  left: 12px;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
   font-family: 'Outfit', sans-serif;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--label-color);
   pointer-events: none;
   transition: all 0.18s ease;
-  background: #fff;          /* covers the border to create notch */
-  padding: 0 4px;
+  background: #fff;
+  padding: 0 3px;
   line-height: 1;
-  letter-spacing: 0;
-  text-transform: none;
-  margin: 0;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 20px);
 }
 
-/* Textarea label starts at top not middle */
 .float-field--textarea label {
-  top: 16px;
+  top: 18px;
   transform: none;
 }
 
-/* Floated state: label cuts through the top border */
 .float-field input:focus ~ label,
 .float-field input:not(:placeholder-shown) ~ label,
 .float-field select:focus ~ label,
@@ -116,14 +121,17 @@ h1 {
 .float-field.floated label {
   top: 0;
   transform: translateY(-50%);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--sea-green);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 16px);
 }
 
-/* Error state */
 .float-field.has-error input,
 .float-field.has-error select,
 .float-field.has-error textarea {
@@ -133,19 +141,19 @@ h1 {
 
 .error-msg {
   font-family: 'Outfit', sans-serif;
-  font-size: 12.5px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--error);
-  margin-top: 5px;
+  margin-top: 4px;
   padding-left: 2px;
 }
 
-/* ── Radio & Checkbox (teal) ── */
+/* ── Radio & Checkbox ── */
 input[type="radio"] {
   -webkit-appearance: none;
   appearance: none;
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   border: 2px solid var(--border);
   border-radius: 50%;
   background: #fff;
@@ -162,8 +170,8 @@ input[type="radio"]:checked {
 input[type="checkbox"] {
   -webkit-appearance: none;
   appearance: none;
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   border: 2px solid var(--border);
   border-radius: 4px;
   background: #fff;
@@ -180,18 +188,18 @@ input[type="checkbox"]:checked {
   background-position: center;
 }
 
-/* ── Primary button ── */
+/* ── Buttons ── */
 .btn-primary {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   width: 100%;
-  padding: 17px 28px;
+  padding: 18px 28px;
   background-color: var(--sea-green);
   color: #fff;
   font-family: 'Outfit', sans-serif;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
   letter-spacing: 0.02em;
   border: none;
@@ -204,19 +212,18 @@ input[type="checkbox"]:checked {
 .btn-primary:active   { transform: scale(0.982); }
 .btn-primary:disabled { background-color: #E0E6E5; color: #B0BBBA; cursor: not-allowed; box-shadow: none; }
 
-/* ── Secondary / Go back ── */
 .btn-secondary {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   width: 100%;
-  padding: 14px 28px;
+  padding: 15px 28px;
   background: transparent;
   border: none;
   color: var(--text-muted);
   font-family: 'Outfit', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   cursor: pointer;
   transition: color 0.18s;
@@ -231,7 +238,7 @@ input[type="checkbox"]:checked {
   border: 1.5px solid var(--border);
   border-radius: 8px;
   font-family: 'Outfit', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   color: #3D5453;
   cursor: pointer;
@@ -240,7 +247,6 @@ input[type="checkbox"]:checked {
   user-select: none;
 }
 .selection-card:hover  { border-color: var(--sea-green); color: var(--sea-green); background: #EBF2F2; }
-.selection-card:active { transform: scale(0.984); box-shadow: inset 0 2px 6px rgba(0,0,0,0.07); }
 .selection-card.selected {
   background-color: var(--sea-green-dk);
   border-color: var(--sea-green-dk);
@@ -249,7 +255,6 @@ input[type="checkbox"]:checked {
   box-shadow: 0 2px 10px rgba(13,34,35,0.2);
 }
 
-/* ── Links ── */
 a { color: var(--sea-green); text-decoration: none; }
 a:hover { color: var(--sea-green-dk); }
 
@@ -258,17 +263,29 @@ a:hover { color: var(--sea-green-dk); }
   background-color: var(--sea-green-dk);
   color: rgba(255,255,255,0.5);
   font-family: 'Outfit', sans-serif;
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 300;
   line-height: 1.75;
   text-align: center;
-  padding: 40px 40px 32px;
+  padding: 48px 40px 36px;
 }
 .app-footer p { max-width: 860px; margin: 0 auto 20px; }
 .app-footer .footer-links {
   display: flex; align-items: center; justify-content: center;
-  gap: 10px; font-size: 13px; color: rgba(255,255,255,0.6);
+  gap: 10px; font-size: 14px; color: rgba(255,255,255,0.6);
 }
 .app-footer .footer-links a { color: rgba(255,255,255,0.6); transition: color 0.15s; }
 .app-footer .footer-links a:hover { color: #fff; }
 .app-footer .footer-divider { color: rgba(255,255,255,0.25); }
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  body { font-size: 15px; }
+  h1 { font-size: 30px !important; }
+  .form-grid { grid-template-columns: 1fr !important; }
+  .app-footer { padding: 32px 20px 24px !important; font-size: 12px !important; }
+  .float-field label { font-size: 12px; }
+  .float-field input,
+  .float-field select,
+  .float-field textarea { font-size: 14px; padding: 14px 10px; }
+}
