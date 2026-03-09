@@ -1,21 +1,21 @@
-# Seacap Portal — Business Funding Application
+# Seacap Portal - Business Funding Application
 
-A full-stack business funding application portal built for **SeacapUSA**. Applicants complete a multi-step form, digitally sign, and receive instant confirmation — while the Seacap team gets a branded PDF via email.
+A full-stack business funding application portal built for **SeacapUSA**. Applicants complete a multi-step form, digitally sign, and receive instant confirmation - while the Seacap team gets a branded PDF via email.
 
 ---
 
 ## Features
 
-- **Multi-step application form** — Business, Owner, Partner, Signature
-- **Smart routing** — Partner step only appears when ownership is below 51%
-- **Floating label inputs** — Clean, modern UX matching Seacap brand
-- **Draw signature** — Canvas-based digital signature pad (no typing)
-- **US phone formatting** — Auto-formats to `(555) 123-4567` as you type
-- **Email validation** — Inline error messages on blur
-- **Animated loading + success screen** — Premium submission experience
-- **PDF generation** — Branded two-column PDF with embedded signature images
-- **Dual email system** — Company gets PDF attachment, applicant gets confirmation
-- **MongoDB** — All applications stored with auto-generated application numbers
+- **Multi-step application form** - Business, Owner, Partner, Signature
+- **Smart routing** - Partner step only appears when ownership is below 51%
+- **Floating label inputs** - Clean, modern UX matching Seacap brand
+- **Draw signature** - Canvas-based digital signature pad (no typing)
+- **US phone formatting** - Auto-formats to `(555) 123-4567` as you type
+- **Email validation** - Inline error messages on blur
+- **Animated loading + success screen** - Premium submission experience
+- **PDF generation** - Branded two-column PDF with embedded signature images
+- **Dual email system** - Company gets PDF attachment, applicant gets confirmation
+- **MongoDB** - All applications stored with auto-generated application numbers
 
 ---
 
