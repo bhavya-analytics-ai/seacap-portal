@@ -136,7 +136,7 @@ export default function OwnerForm({ next, back, formData, setFormData }) {
 
         <FloatInput label="SSN"           field="ssn"  value={o.ssn}  onChange={handleChange} required={R} submitAttempted={submitAttempted} />
         <FloatInput label="Date of Birth" field="dob"  value={o.dob}  onChange={handleChange} type="date" required={R} submitAttempted={submitAttempted} />
-        <FloatInput label="Cell #"        field="cell" value={o.cell} onChange={handleChange} required={R} submitAttempted={submitAttempted} />
+        <FloatInput label="Cell Phone"        field="cell" value={o.cell} onChange={handleChange} required={R} submitAttempted={submitAttempted} />
         <FloatInput label="Home Phone"    field="home" value={o.home} onChange={handleChange} />
 
       </div>

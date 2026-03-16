@@ -129,7 +129,7 @@ export default function Application() {
         .slide-enter-right { transform: translateX(48px);  opacity: 0; }
         .slide-enter-left  { transform: translateX(-48px); opacity: 0; }
         .app-header-inner {
-          max-width: 1200px; margin: 0 auto; padding: 22px 66px;
+          max-width: 1700px; margin: 0 auto; padding: 28px 66px;
           display: flex; align-items: center; justify-content: space-between;
         }
         .app-header-logo { height: 52px; display: block; }
@@ -205,7 +205,7 @@ export default function Application() {
   <p style={{ fontWeight: 500 }}>
     By clicking Get Started, you authorize SeacapUSA and prospective third-party funding providers to contact you at the numbers you provide (including mobile) during any step of this application, via phone (including automated telephone dialing systems, prerecorded messages, SMS, and MMS), even if your number is on a Do Not Call Registry. You are not required to consent to be contacted in this manner to use SeacapUSA services.
   </p>
-  <p style={{ marginBottom: 18, color: "rgba(255,255,255,0.4)", fontSize: 18, fontWeight: 600 }}>
+  <p style={{ marginBottom: 6, color: "rgba(255,255,255,0.4)", fontSize: 18, fontWeight: 600 }}>
     © 2024 SeacapUSA. All Rights Reserved.
   </p>
   <div className="footer-links" style={{ fontWeight: 600, fontSize: 18 }}>

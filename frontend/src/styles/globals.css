@@ -283,15 +283,17 @@ a:hover { color: var(--sea-green-dk); }
 /* ── Footer ── */
 .app-footer {
   background-color: var(--sea-green-dk);
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.65);
   font-family: 'Commuters Sans', sans-serif;
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.75;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
   text-align: center;
-  padding: 48px 60px 40px;
+  padding: 24px 48px 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-.app-footer p { max-width: 1700px; margin: 0 auto 28px; }
+.app-footer p { max-width: 1400px; margin: 0 auto 28px; }
 .app-footer .footer-links {
   display: flex; align-items: center; justify-content: center;
   gap: 12px; font-size: 15px; color: rgba(255,255,255,0.55);

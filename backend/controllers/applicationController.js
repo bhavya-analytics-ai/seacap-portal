@@ -101,6 +101,59 @@ async function uploadToOneDrive(pdfBuffer, filename) {
   }
 }
 
+async function appendToExcelOnline(data, applicationNumber) {
+  const { ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET, ONEDRIVE_TENANT_ID } = process.env;
+  if (!ONEDRIVE_CLIENT_ID || !ONEDRIVE_CLIENT_SECRET || !ONEDRIVE_TENANT_ID) {
+    console.log("Excel Online not configured — skipping");
+    return null;
+  }
+  try {
+    // Uncomment when ready:
+    // const { ConfidentialClientApplication } = await import("@azure/msal-node");
+    // const fetch = (await import("node-fetch")).default;
+    // const msalClient = new ConfidentialClientApplication({
+    //   auth: {
+    //     clientId:     ONEDRIVE_CLIENT_ID,
+    //     clientSecret: ONEDRIVE_CLIENT_SECRET,
+    //     authority:    `https://login.microsoftonline.com/${ONEDRIVE_TENANT_ID}`,
+    //   },
+    // });
+    // const tokenRes = await msalClient.acquireTokenByClientCredential({
+    //   scopes: ["https://graph.microsoft.com/.default"],
+    // });
+    // const excelFile = process.env.EXCEL_FILE_NAME || "SeacapApplications.xlsx";
+    // const baseUrl = `https://graph.microsoft.com/v1.0/me/drive/root:/${excelFile}:/workbook`;
+    // const headers = { Authorization: `Bearer ${tokenRes.accessToken}`, "Content-Type": "application/json" };
+    // const row = [[
+    //   applicationNumber,
+    //   new Date().toLocaleDateString("en-US"),
+    //   data.business?.businessName || "",
+    //   data.business?.dba          || "",
+    //   data.business?.state        || "",
+    //   data.business?.phone        || "",
+    //   data.business?.email        || "",
+    //   data.owner?.name            || "",
+    //   data.owner?.ownership       || "",
+    //   data.owner?.state           || "",
+    //   data.owner?.cell            || "",
+    //   data.owner?.home            || "",
+    //   data.partner?.name          || "",
+    //   data.partner?.ownership     || "",
+    //   data.partner?.cellPhone     || "",
+    //   data.partner?.homePhone     || "",
+    // ]];
+    // await fetch(`${baseUrl}/tables/0/rows/add`, {
+    //   method: "POST", headers, body: JSON.stringify({ values: row }),
+    // });
+    // console.log(`✓ Excel Online row added: ${applicationNumber}`);
+    console.log("Excel Online not yet enabled — skipping");
+    return null;
+  } catch (err) {
+    console.warn("Excel Online append failed (non-fatal):", err.message);
+    return null;
+  }
+}
+
 // ─────────────────────────────────────────────────────────────────
 // EMAIL SETUP (in your .env file)
 // ─────────────────────────────────────────────────────────────────
@@ -231,6 +284,7 @@ export async function submitApplication(req, res) {
 
     uploadToSupabase(pdfBuffer, filename).catch(() => {});
     uploadToOneDrive(pdfBuffer, filename).catch(() => {});
+    appendToExcelOnline({ business, owner, partner }, pdfData.applicationNumber).catch(() => {});
 
     try {
       await sendApplicationEmail({

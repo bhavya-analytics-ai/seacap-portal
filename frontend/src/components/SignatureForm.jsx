@@ -232,7 +232,10 @@ function SignaturePad({ label, fieldKey, onSave }) {
     setIsEmpty(false)
   }
 
-  const stopDraw = () => { drawing.current = false }
+  const stopDraw = () => {
+    drawing.current = false
+    if (!isEmpty) save()
+  }
 
   const clear = () => {
     const canvas = canvasRef.current
@@ -295,7 +298,7 @@ function SignaturePad({ label, fieldKey, onSave }) {
           onTouchStart={startDraw} onTouchMove={draw} onTouchEnd={stopDraw}
         />
       </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start" }}>
         <button onClick={clear} style={{
           fontFamily: "'Commuters Sans', sans-serif", fontSize: 12, color: "#B0BBBA",
           background: "none", border: "none", cursor: "pointer", padding: 0,
@@ -303,16 +306,6 @@ function SignaturePad({ label, fieldKey, onSave }) {
           onMouseEnter={e => e.currentTarget.style.color = "#C0392B"}
           onMouseLeave={e => e.currentTarget.style.color = "#B0BBBA"}
         >✕ Clear</button>
-        {saved ? (
-          <span style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 12, color: "#195455", fontWeight: 500 }}>✓ Saved</span>
-        ) : (
-          <button onClick={save} disabled={isEmpty} style={{
-            fontFamily: "'Commuters Sans', sans-serif", fontSize: 12, fontWeight: 500,
-            color: isEmpty ? "#C7D8CD" : "#195455",
-            background: "none", border: "none",
-            cursor: isEmpty ? "not-allowed" : "pointer", padding: 0,
-          }}>Save →</button>
-        )}
       </div>
     </div>
   )
