@@ -2,23 +2,23 @@ export default function Stepper({ step }) {
   const steps = ["Business", "Owner", "Partner", "Signature"]
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginBottom: 48 }}>
+    <div style={{ display: "flex", justifyContent: "center", marginBottom: 64 }}>
       <style>{`
         .stepper-connector {
-          width: 110px;
+          width: 120px;
           height: 2px;
           border-radius: 2px;
-          margin-top: 8px;
-          margin-left: 8px;
-          margin-right: 8px;
+          margin-top: 10px;
+          margin-left: 10px;
+          margin-right: 10px;
           margin-bottom: 28px;
           transition: background-color 0.3s ease;
           flex-shrink: 0;
         }
         .stepper-label {
-          font-family: 'Outfit', sans-serif;
-          font-size: 15px;
-          letter-spacing: 0.01em;
+          font-family: 'Commuters Sans', sans-serif;
+          font-size: 14px;
+          letter-spacing: 0.02em;
           white-space: nowrap;
           transition: color 0.25s ease;
         }
@@ -39,12 +39,12 @@ export default function Stepper({ step }) {
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
 
                 <div style={{
-                  width:           isActive ? 20 : isCompleted ? 20 : 14,
-                  height:          isActive ? 20 : isCompleted ? 20 : 14,
+                  width:           isActive ? 22 : isCompleted ? 22 : 14,
+                  height:          isActive ? 22 : isCompleted ? 22 : 14,
                   borderRadius:    "50%",
                   backgroundColor: isCompleted || isActive ? "#195455" : "#fff",
                   border:          `2px solid ${isCompleted || isActive ? "#195455" : "#C7D8CD"}`,
-                  boxShadow:       isActive ? "0 0 0 6px rgba(25,84,85,0.1)" : "none",
+                  boxShadow:       isActive ? "0 0 0 7px rgba(25,84,85,0.1)" : "none",
                   transition:      "all 0.25s ease",
                   marginTop:       isActive ? 0 : isCompleted ? 0 : 3,
                   display:         "flex",

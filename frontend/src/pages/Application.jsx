@@ -129,22 +129,22 @@ export default function Application() {
         .slide-enter-right { transform: translateX(48px);  opacity: 0; }
         .slide-enter-left  { transform: translateX(-48px); opacity: 0; }
         .app-header-inner {
-          max-width: 1200px; margin: 0 auto; padding: 22px 56px;
+          max-width: 1200px; margin: 0 auto; padding: 28px 64px;
           display: flex; align-items: center; justify-content: space-between;
         }
-        .app-header-logo { height: 52px; display: block; }
+        .app-header-logo { height: 56px; display: block; }
         .app-header-phone {
-          font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 600;
+          font-family: 'Commuters Sans', sans-serif; font-size: 22px; font-weight: 600;
           color: #0D2223; text-decoration: none; letter-spacing: 0.01em;
           transition: color 0.18s; white-space: nowrap;
         }
         .app-header-phone:hover { color: #195455; }
-        .app-main { padding: 60px 28px 80px; }
+        .app-main { padding: 72px 28px 100px; }
         @media (max-width: 600px) {
           .app-header-inner { padding: 16px 20px; }
           .app-header-logo  { height: 34px; }
           .app-header-phone { font-size: 15px; }
-          .app-main { padding: 28px 16px 60px; }
+          .app-main { padding: 36px 16px 72px; }
         }
       `}</style>
 
@@ -157,14 +157,14 @@ export default function Application() {
         </div>
       </header>
 
-      <main className="app-main" style={{ flex: 1, maxWidth: 760, width: "100%", margin: "0 auto" }}>
+      <main className="app-main" style={{ flex: 1, maxWidth: 780, width: "100%", margin: "0 auto" }}>
 
         {!hideChrome && (
           <>
             <Stepper step={step} />
-            <div style={{ textAlign: "center", marginBottom: 44 }}>
+            <div style={{ textAlign: "center", marginBottom: 56 }}>
               <h1 style={{
-                fontFamily: "'Cormorant', serif", fontSize: 46, fontWeight: 600,
+                fontFamily: "'Beliau', serif", fontSize: 48, fontWeight: 400,
                 color: "#0D2223", letterSpacing: "-0.01em", lineHeight: 1.2, margin: 0,
               }}>
                 {stepHeadings[step]}
@@ -182,8 +182,8 @@ export default function Application() {
         {!hideChrome && (
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "center",
-            gap: 7, marginTop: 24,
-            fontFamily: "'Outfit', sans-serif", fontSize: 14, color: "#B0BBBA",
+            gap: 7, marginTop: 32,
+            fontFamily: "'Commuters Sans', sans-serif", fontSize: 14, color: "#B0BBBA",
           }}>
             <ShieldCheck size={15} strokeWidth={1.8} color="#B0BBBA" />
             <span>Safe, Secure &amp; Confidential</span>
