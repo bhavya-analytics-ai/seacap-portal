@@ -14,7 +14,122 @@ const stepHeadings = {
   4: "Sign & submit your application",
 }
 
+
+// ─────────────────────────────────────────────────────────────────
+// PROGRESS ORB — HOW TO UPDATE
+// ─────────────────────────────────────────────────────────────────
+// The orb tracks how many fields are filled per step.
+// Field lists are defined at the top of this function.
+//
+// TO ADD A FIELD:
+//   Add the field key to the relevant array below.
+//   Example: const BUSINESS_FIELDS = [..., "newField"]
+//
+// TO REMOVE A FIELD:
+//   Delete it from the array. Percentage recalculates automatically.
+//
+// TO CHANGE STEP PERCENTAGES:
+//   Step 1 → maxes at 25%
+//   Step 2 → maxes at 50% (or 67% if ownership >= 51%)
+//   Step 3 → maxes at 75% (partner step)
+//   Step 4 → goes to 100%
+//   Find the if(step === X) blocks and update the numbers.
+//
+// FIELD KEYS must match exactly what's used in handleChange() in each form.
+// If you rename a field in the form, rename it here too.
+// ─────────────────────────────────────────────────────────────────
+
 const SLIDE_DURATION = 380
+
+function ProgressOrb({ step, hasPartner, formData }) {
+
+  const BUSINESS_FIELDS = ["businessName","dba","address","city","state","zip","phone","ein","startDate","ownershipLength","email","productService","advanceAmount"]
+  const OWNER_FIELDS    = ["name","title","ownership","fico","address","city","state","zip","ssn","dob","cell"]
+  const PARTNER_FIELDS  = ["name","title","ownership","fico","address","city","state","zip","ssn","dob","cellPhone"]
+  const SIG_FIELDS      = ["applicant"]
+
+  const countFilled = (obj, fields) => {
+    if (!obj) return 0
+    return fields.filter(f => {
+      const v = obj[f]
+      return v !== undefined && v !== null && String(v).trim() !== "" && v !== false
+    }).length
+  }
+
+  const ownership = parseFloat(formData?.owner?.ownership)
+  const ownershipOver51 = !isNaN(ownership) && ownership >= 51
+
+  const businessFilled  = countFilled(formData?.business, BUSINESS_FIELDS)
+  const businessTotal   = BUSINESS_FIELDS.length
+  const ownerFilled     = countFilled(formData?.owner, OWNER_FIELDS)
+  const ownerTotal      = OWNER_FIELDS.length
+  const partnerFilled   = countFilled(formData?.partner, PARTNER_FIELDS)
+  const partnerTotal    = PARTNER_FIELDS.length
+  const sigFilled       = countFilled(formData?.signature, SIG_FIELDS)
+  const sigTotal        = SIG_FIELDS.length
+
+  let pct = 0
+
+  if (step === 1) {
+    pct = Math.round((businessFilled / businessTotal) * 25)
+  } else if (step === 2) {
+    const ownerProgress = Math.round((ownerFilled / ownerTotal) * 25)
+    const page2Max = ownershipOver51 ? 42 : 25
+    pct = 25 + Math.round((ownerFilled / ownerTotal) * page2Max)
+  } else if (step === 3) {
+    pct = 50 + Math.round((partnerFilled / partnerTotal) * 25)
+  } else if (step === 4) {
+    const base = hasPartner ? 75 : 67
+    pct = base + Math.round((sigFilled / sigTotal) * (100 - base))
+  }
+
+  pct = Math.min(100, Math.max(0, pct))
+
+  const r = 28
+  const circumference = 2 * Math.PI * r
+  const offset = circumference - (pct / 100) * circumference
+  return (
+    <div style={{
+      position: "fixed", bottom: 28, right: 28, zIndex: 999,
+      filter: "drop-shadow(0 4px 16px rgba(13,34,35,0.4))",
+    }}>
+      <style>{`
+        @keyframes orb-spin { from{transform:rotate(0deg) translateX(28px) rotate(0deg)} to{transform:rotate(360deg) translateX(28px) rotate(-360deg)} }
+        @keyframes orb-spin-rev { from{transform:rotate(0deg) translateX(28px) rotate(0deg)} to{transform:rotate(-360deg) translateX(28px) rotate(360deg)} }
+        @keyframes orb-breathe { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .orb-dot1 { animation: orb-spin 3.5s linear infinite; }
+        .orb-dot2 { animation: orb-spin-rev 5s linear infinite; animation-delay: -1s; }
+        .orb-dot3 { animation: orb-breathe 2s ease-in-out infinite; }
+        .progress-ring { transition: stroke-dashoffset 0.6s cubic-bezier(0.4,0,0.2,1); }
+      `}</style>
+      <svg width="76" height="76" viewBox="0 0 76 76" style={{ overflow: "visible" }}>
+        <circle cx="38" cy="38" r="36" fill="#0D2223" />
+        <circle cx="38" cy="38" r="28" fill="none" stroke="rgba(100,143,137,0.12)" strokeWidth="1.5" strokeDasharray="3 4" />
+        <circle cx="38" cy="38" r={r} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="4" />
+        <circle
+          className="progress-ring"
+          cx="38" cy="38" r={r}
+          fill="none" stroke="#648F89" strokeWidth="4"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+          transform="rotate(-90 38 38)"
+        />
+        <circle cx="38" cy="38" r="16" fill="#195455" />
+        <text x="38" y="42" textAnchor="middle" fill="#fff" fontSize="11" fontWeight="600" fontFamily="'Commuters Sans', sans-serif">{pct}%</text>
+        <g transform="translate(38,38)">
+          <circle className="orb-dot1" cx="0" cy="0" r="3.5" fill="#C7D8CD" />
+        </g>
+        <g transform="translate(38,38)">
+          <circle className="orb-dot2" cx="0" cy="0" r="2" fill="#648F89" />
+        </g>
+        <g transform="translate(38,38)">
+          <circle className="orb-dot3" cx="0" cy="0" r="1.5" fill="rgba(199,216,205,0.6)" />
+        </g>
+      </svg>
+    </div>
+  )
+}
 
 export default function Application() {
 
@@ -36,6 +151,11 @@ export default function Application() {
   const [animating,   setAnimating]   = useState(false)
   const [slideClass,  setSlideClass]  = useState("")
   const hasReplayed = useRef(false)
+
+  const hasPartner = (() => {
+    const pct = parseFloat(formData.owner?.ownership)
+    return !isNaN(pct) && pct < 51
+  })()
 
   useEffect(() => {
     localStorage.setItem("seacap_formData", JSON.stringify(formData))
@@ -201,19 +321,21 @@ export default function Application() {
         )}
       </main>
 
+      {!hideChrome && <ProgressOrb step={step} hasPartner={hasPartner} />}
+
       <footer className="app-footer">
-  <p style={{ fontWeight: 500 }}>
-    By clicking Get Started, you authorize SeacapUSA and prospective third-party funding providers to contact you at the numbers you provide (including mobile) during any step of this application, via phone (including automated telephone dialing systems, prerecorded messages, SMS, and MMS), even if your number is on a Do Not Call Registry. You are not required to consent to be contacted in this manner to use SeacapUSA services.
-  </p>
-  <p style={{ marginBottom: 6, color: "rgba(255,255,255,0.4)", fontSize: 18, fontWeight: 600 }}>
-    © 2024 SeacapUSA. All Rights Reserved.
-  </p>
-  <div className="footer-links" style={{ fontWeight: 600, fontSize: 18 }}>
-    <a href="https://seacapusa.com/terms-and-conditions/" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>
-    <span className="footer-divider">|</span>
-    <a href="https://seacapusa.com/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy</a>
-  </div>
-</footer>
+        <p style={{ fontWeight: 500 }}>
+          By clicking Get Started, you authorize SeacapUSA and prospective third-party funding providers to contact you at the numbers you provide (including mobile) during any step of this application, via phone (including automated telephone dialing systems, prerecorded messages, SMS, and MMS), even if your number is on a Do Not Call Registry. You are not required to consent to be contacted in this manner to use SeacapUSA services.
+        </p>
+        <p style={{ marginBottom: 6, color: "rgba(255,255,255,0.4)", fontSize: 18, fontWeight: 600 }}>
+          © 2024 SeacapUSA. All Rights Reserved.
+        </p>
+        <div className="footer-links" style={{ fontWeight: 600, fontSize: 18 }}>
+          <a href="https://seacapusa.com/terms-and-conditions/" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>
+          <span className="footer-divider">|</span>
+          <a href="https://seacapusa.com/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy</a>
+        </div>
+      </footer>
 
     </div>
   )
