@@ -53,8 +53,8 @@ body {
 
 h1 {
   font-family: 'Beliau', serif;
-  font-weight: 600;
-  font-size: 46px;
+  font-weight: 400;
+  font-size: 48px;
   letter-spacing: -0.01em;
   color: var(--text-dark);
   line-height: 1.15;
@@ -283,29 +283,30 @@ a:hover { color: var(--sea-green-dk); }
 /* ── Footer ── */
 .app-footer {
   background-color: var(--sea-green-dk);
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.45);
   font-family: 'Commuters Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 17px;
+  font-weight: 600;
   line-height: 1.75;
   text-align: center;
-  padding: 48px 40px 36px;
+  padding: 48px 60px 40px;
 }
-.app-footer p { max-width: 860px; margin: 0 auto 20px; }
+.app-footer p { max-width: 1700px; margin: 0 auto 28px; }
 .app-footer .footer-links {
   display: flex; align-items: center; justify-content: center;
-  gap: 10px; font-size: 14px; color: rgba(255,255,255,0.6);
+  gap: 12px; font-size: 15px; color: rgba(255,255,255,0.55);
+  margin-top: 6px;
 }
-.app-footer .footer-links a { color: rgba(255,255,255,0.6); transition: color 0.15s; }
+.app-footer .footer-links a { color: rgba(255,255,255,0.55); transition: color 0.15s; }
 .app-footer .footer-links a:hover { color: #fff; }
-.app-footer .footer-divider { color: rgba(255,255,255,0.25); }
+.app-footer .footer-divider { color: rgba(255,255,255,0.2); }
 
 /* ── Mobile ── */
 @media (max-width: 600px) {
   body { font-size: 15px; }
   h1 { font-size: 30px !important; }
   .form-grid { grid-template-columns: 1fr !important; }
-  .app-footer { padding: 32px 20px 24px !important; font-size: 12px !important; }
+  .app-footer { padding: 48px 24px 36px !important; font-size: 12px !important; }
   .float-field label { font-size: 12px; }
   .float-field input,
   .float-field select,

@@ -70,7 +70,7 @@ function LoadingScreen() {
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <p style={{
-          fontFamily: "'Cormorant', serif", fontSize: 26, fontWeight: 600,
+          fontFamily: "'Beliau', serif", fontSize: 26, fontWeight: 400,
           color: "#0D2223", margin: 0, letterSpacing: "-0.01em",
           background: "linear-gradient(90deg, #0D2223 0%, #195455 50%, #0D2223 100%)",
           backgroundSize: "200% auto",
@@ -80,7 +80,7 @@ function LoadingScreen() {
         }}>
           Submitting your application…
         </p>
-        <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 14, color: "#9EAAA8", margin: 0, fontWeight: 300 }}>
+        <p style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 14, color: "#9EAAA8", margin: 0, fontWeight: 300 }}>
           Please don't close this window
         </p>
       </div>
@@ -133,21 +133,21 @@ function SuccessScreen({ applicationNumber }) {
       </div>
 
       <h2 className="fadeUp-2" style={{
-        fontFamily: "'Cormorant', serif", fontSize: 40, fontWeight: 600,
+        fontFamily: "'Beliau', serif", fontSize: 40, fontWeight: 400,
         color: "#0D2223", margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.1,
       }}>
         Application Submitted
       </h2>
 
       {applicationNumber && (
-        <div className="fadeUp-3" style={{ fontFamily: "'Outfit', sans-serif", fontSize: 14, color: "#648F89", marginBottom: 10 }}>
+        <div className="fadeUp-3" style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 14, color: "#648F89", marginBottom: 10 }}>
           Reference number:{" "}
           <span style={{ fontWeight: 600, color: "#195455" }}>{applicationNumber}</span>
         </div>
       )}
 
       <p className="fadeUp-3" style={{
-        fontFamily: "'Outfit', sans-serif", fontSize: 15, color: "#9EAAA8",
+        fontFamily: "'Commuters Sans', sans-serif", fontSize: 15, color: "#9EAAA8",
         maxWidth: 360, lineHeight: 1.75, margin: "0 0 32px", fontWeight: 300,
       }}>
         Thank you! Your funding application has been received.
@@ -162,7 +162,7 @@ function SuccessScreen({ applicationNumber }) {
         ].map(({ icon, label }) => (
           <div key={label} style={{
             display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-            fontFamily: "'Outfit', sans-serif", fontSize: 13, color: "#9EAAA8",
+            fontFamily: "'Commuters Sans', sans-serif", fontSize: 13, color: "#9EAAA8",
           }}>
             <div style={{
               width: 44, height: 44, borderRadius: "50%",
@@ -198,7 +198,6 @@ function SignaturePad({ label, fieldKey, onSave }) {
     ctx.lineCap     = "round"
     ctx.lineJoin    = "round"
 
-    // Prevent page scroll while signing on mobile
     const wrap = wrapRef.current
     const prevent = (e) => e.preventDefault()
     wrap.addEventListener("touchstart", prevent, { passive: false })
@@ -252,7 +251,7 @@ function SignaturePad({ label, fieldKey, onSave }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <div style={{
-        fontFamily: "'Outfit', sans-serif", fontSize: 11, fontWeight: 600,
+        fontFamily: "'Commuters Sans', sans-serif", fontSize: 11, fontWeight: 600,
         letterSpacing: "0.09em", textTransform: "uppercase", color: "#8A9E9C",
       }}>
         {label}
@@ -283,7 +282,7 @@ function SignaturePad({ label, fieldKey, onSave }) {
             pointerEvents: "none",
           }}>
             <span style={{
-              fontFamily: "'Cormorant', serif", fontSize: 16, fontStyle: "italic",
+              fontFamily: "'Beliau', serif", fontSize: 16, fontStyle: "italic",
               color: "#C7D8CD", fontWeight: 400,
             }}>Sign here…</span>
           </div>
@@ -298,17 +297,17 @@ function SignaturePad({ label, fieldKey, onSave }) {
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <button onClick={clear} style={{
-          fontFamily: "'Outfit', sans-serif", fontSize: 12, color: "#B0BBBA",
+          fontFamily: "'Commuters Sans', sans-serif", fontSize: 12, color: "#B0BBBA",
           background: "none", border: "none", cursor: "pointer", padding: 0,
         }}
           onMouseEnter={e => e.currentTarget.style.color = "#C0392B"}
           onMouseLeave={e => e.currentTarget.style.color = "#B0BBBA"}
         >✕ Clear</button>
         {saved ? (
-          <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 12, color: "#195455", fontWeight: 500 }}>✓ Saved</span>
+          <span style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 12, color: "#195455", fontWeight: 500 }}>✓ Saved</span>
         ) : (
           <button onClick={save} disabled={isEmpty} style={{
-            fontFamily: "'Outfit', sans-serif", fontSize: 12, fontWeight: 500,
+            fontFamily: "'Commuters Sans', sans-serif", fontSize: 12, fontWeight: 500,
             color: isEmpty ? "#C7D8CD" : "#195455",
             background: "none", border: "none",
             cursor: isEmpty ? "not-allowed" : "pointer", padding: 0,
@@ -395,7 +394,7 @@ export default function SignatureForm({ back, formData, setFormData, onSubmitted
     <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
 
       <p style={{
-        fontFamily: "'Outfit', sans-serif", fontSize: 14,
+        fontFamily: "'Commuters Sans', sans-serif", fontSize: 14,
         color: "#648F89", lineHeight: 1.7, margin: 0,
         borderLeft: "3px solid #C7D8CD", paddingLeft: 14,
       }}>
@@ -417,7 +416,7 @@ export default function SignatureForm({ back, formData, setFormData, onSubmitted
         onChange={handleSig} type="date" />
 
       {error && (
-        <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, color: "#C0392B", fontWeight: 500, margin: 0 }}>
+        <p style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 13, color: "#C0392B", fontWeight: 500, margin: 0 }}>
           {error}
         </p>
       )}

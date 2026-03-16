@@ -30,8 +30,8 @@ export default function Application() {
     } catch { return { business: {}, owner: {}, partner: {}, signature: {} } }
   })
 
-  const [submitted,  setSubmitted]  = useState(false)
-  const [submitting, setSubmitting] = useState(false)
+  const [submitted,   setSubmitted]   = useState(false)
+  const [submitting,  setSubmitting]  = useState(false)
   const [displayStep, setDisplayStep] = useState(1)
   const [animating,   setAnimating]   = useState(false)
   const [slideClass,  setSlideClass]  = useState("")
@@ -129,22 +129,27 @@ export default function Application() {
         .slide-enter-right { transform: translateX(48px);  opacity: 0; }
         .slide-enter-left  { transform: translateX(-48px); opacity: 0; }
         .app-header-inner {
-          max-width: 1200px; margin: 0 auto; padding: 28px 64px;
+          max-width: 1200px; margin: 0 auto; padding: 22px 66px;
           display: flex; align-items: center; justify-content: space-between;
         }
-        .app-header-logo { height: 56px; display: block; }
+        .app-header-logo { height: 52px; display: block; }
         .app-header-phone {
-          font-family: 'Commuters Sans', sans-serif; font-size: 22px; font-weight: 600;
-          color: #0D2223; text-decoration: none; letter-spacing: 0.01em;
-          transition: color 0.18s; white-space: nowrap;
+          font-family: 'Commuters Sans', sans-serif;
+          font-size: 26px;
+          font-weight: 700;
+          color: #0D2223;
+          text-decoration: none;
+          letter-spacing: 0.01em;
+          transition: color 0.18s;
+          white-space: nowrap;
         }
         .app-header-phone:hover { color: #195455; }
-        .app-main { padding: 72px 28px 100px; }
+        .app-main { padding: 64px 28px 560px; }
         @media (max-width: 600px) {
           .app-header-inner { padding: 16px 20px; }
           .app-header-logo  { height: 34px; }
-          .app-header-phone { font-size: 15px; }
-          .app-main { padding: 36px 16px 72px; }
+          .app-header-phone { font-size: 20px; }
+          .app-main { padding: 36px 16px 120px; }
         }
       `}</style>
 
@@ -164,8 +169,13 @@ export default function Application() {
             <Stepper step={step} />
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <h1 style={{
-                fontFamily: "'Beliau', serif", fontSize: 48, fontWeight: 400,
-                color: "#0D2223", letterSpacing: "-0.01em", lineHeight: 1.2, margin: 0,
+                fontFamily: "'Beliau', serif",
+                fontSize: 48,
+                fontWeight: 600,
+                color: "#0D2223",
+                letterSpacing: "-0.01em",
+                lineHeight: 1.2,
+                margin: 0,
               }}>
                 {stepHeadings[step]}
               </h1>
@@ -192,22 +202,18 @@ export default function Application() {
       </main>
 
       <footer className="app-footer">
-        <p>
-          By clicking Get Started, you authorize SeacapUSA and prospective third-party funding
-          providers to contact you at the numbers you provide (including mobile) during any step
-          of this application, via phone (including automated telephone dialing systems,
-          prerecorded messages, SMS, and MMS), even if your number is on a Do Not Call Registry.
-          You are not required to consent to be contacted in this manner to use SeacapUSA services.
-        </p>
-        <p style={{ marginBottom: 16, color: "rgba(255,255,255,0.4)", fontSize: 13 }}>
-          © {new Date().getFullYear()} SeacapUSA. All Rights Reserved.
-        </p>
-        <div className="footer-links">
-          <a href="/terms">Terms and Conditions</a>
-          <span className="footer-divider">|</span>
-          <a href="/privacy">Privacy</a>
-        </div>
-      </footer>
+  <p style={{ fontWeight: 500 }}>
+    By clicking Get Started, you authorize SeacapUSA and prospective third-party funding providers to contact you at the numbers you provide (including mobile) during any step of this application, via phone (including automated telephone dialing systems, prerecorded messages, SMS, and MMS), even if your number is on a Do Not Call Registry. You are not required to consent to be contacted in this manner to use SeacapUSA services.
+  </p>
+  <p style={{ marginBottom: 18, color: "rgba(255,255,255,0.4)", fontSize: 18, fontWeight: 600 }}>
+    © 2024 SeacapUSA. All Rights Reserved.
+  </p>
+  <div className="footer-links" style={{ fontWeight: 600, fontSize: 18 }}>
+    <a href="https://seacapusa.com/terms-and-conditions/" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>
+    <span className="footer-divider">|</span>
+    <a href="https://seacapusa.com/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy</a>
+  </div>
+</footer>
 
     </div>
   )

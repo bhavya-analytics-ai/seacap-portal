@@ -1,8 +1,6 @@
 import { useState } from "react"
 
-const REQUIRED = [
-  
-]
+const REQUIRED = []
 
 function formatPhone(val) {
   const d = val.replace(/\D/g, "").slice(0, 10)
@@ -55,16 +53,9 @@ function FloatInput({ label, field, value, onChange, type = "text", required = f
 
   return (
     <div className={`float-field${error ? " has-error" : ""}${hasValue ? " floated" : ""}`}>
-      <input
-        type={type}
-        placeholder=" "
-        value={value || ""}
-        onChange={handleChange}
-        onBlur={() => setTouched(true)}
-      />
-      <label>
-        {label}{required && <span style={{ color: "#C0392B", marginLeft: 2 }}>*</span>}
-      </label>
+      <input type={type} placeholder=" " value={value || ""}
+        onChange={handleChange} onBlur={() => setTouched(true)} />
+      <label>{label}{required && <span style={{ color: "#C0392B", marginLeft: 2 }}>*</span>}</label>
       {error && <div className="error-msg">{error}</div>}
     </div>
   )
@@ -87,9 +78,7 @@ function FloatSelect({ label, field, value, onChange, options, required = false,
         <option value="" disabled hidden />
         {options.map(o => <option key={o} value={o}>{o}</option>)}
       </select>
-      <label>
-        {label}{required && <span style={{ color: "#C0392B", marginLeft: 2 }}>*</span>}
-      </label>
+      <label>{label}{required && <span style={{ color: "#C0392B", marginLeft: 2 }}>*</span>}</label>
       <span style={{
         position: "absolute", right: 14, top: "50%",
         transform: "translateY(-50%)",
@@ -108,8 +97,6 @@ export default function PartnerForm({ next, back, formData, setFormData }) {
   }
 
   const p = formData.partner || {}
-
-  // Default DOB to 1975-01-01 if not set
   if (!p.dob) handleChange("dob", "1975-01-01")
 
   const isFormValid = () => {
@@ -146,9 +133,9 @@ export default function PartnerForm({ next, back, formData, setFormData }) {
   const R = true
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
         <FloatInput  label="Partner Name"  field="name"      value={p.name}      onChange={handleChange} required={R} submitAttempted={submitAttempted} />
         <FloatSelect label="Title"         field="title"     value={p.title}     onChange={handleChange} options={titleOptions} required={R} submitAttempted={submitAttempted} />
         <FloatInput  label="Ownership %"   field="ownership" value={p.ownership} onChange={handleChange} type="number" required={R} submitAttempted={submitAttempted} />
@@ -164,10 +151,7 @@ export default function PartnerForm({ next, back, formData, setFormData }) {
       </div>
 
       {submitAttempted && !isFormValid() && (
-        <p style={{
-          fontFamily: "'Outfit', sans-serif", fontSize: 13.5,
-          color: "#C0392B", fontWeight: 500, margin: 0,
-        }}>
+        <p style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 13.5, color: "#C0392B", fontWeight: 500, margin: 0 }}>
           Please fill in all required fields before continuing.
         </p>
       )}

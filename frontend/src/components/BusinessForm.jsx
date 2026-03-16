@@ -1,8 +1,6 @@
 import { useState } from "react"
 
-const REQUIRED = [
-  
-]
+const REQUIRED = []
 
 function formatPhone(val) {
   const d = val.replace(/\D/g, "").slice(0, 10)
@@ -116,14 +114,22 @@ export default function BusinessForm({ next, formData, setFormData }) {
   const entityOptions   = ["Sole Proprietorship","Partnership","Corporation","LLC","Other"]
   const businessOptions = ["Retail","MO/TO","Wholesale","Restaurant","Supermarket","Other"]
 
-  const sectionLabel = { fontFamily: "'Outfit', sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: "0.09em", textTransform: "uppercase", color: "#8A9E9C", marginBottom: 10 }
-  const radioLabel   = { display: "flex", alignItems: "center", gap: 9, fontFamily: "'Outfit', sans-serif", fontSize: 15, fontWeight: 400, color: "#3D5453", cursor: "pointer" }
+  const sectionLabel = {
+    fontFamily: "'Commuters Sans', sans-serif",
+    fontSize: 12, fontWeight: 600, letterSpacing: "0.09em",
+    textTransform: "uppercase", color: "#8A9E9C", marginBottom: 12,
+  }
+  const radioLabel = {
+    display: "flex", alignItems: "center", gap: 9,
+    fontFamily: "'Commuters Sans', sans-serif",
+    fontSize: 15, fontWeight: 400, color: "#3D5453", cursor: "pointer",
+  }
   const R = true
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-      <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+      <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
         <FloatInput label="Legal / Corporate Name"   field="businessName"    value={b.businessName}    onChange={handleChange} required={R} submitAttempted={submitAttempted} />
         <FloatInput label="DBA"                      field="dba"             value={b.dba}             onChange={handleChange} required={R} submitAttempted={submitAttempted} />
         <FloatInput label="Physical Address"         field="address"         value={b.address}         onChange={handleChange} required={R} submitAttempted={submitAttempted} />
@@ -144,7 +150,7 @@ export default function BusinessForm({ next, formData, setFormData }) {
 
       <div>
         <div style={sectionLabel}>Type of Entity</div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px 28px" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px" }}>
           {entityOptions.map(opt => (
             <label key={opt} style={radioLabel}>
               <input type="radio" name="entityType" checked={b.entityType === opt} onChange={() => handleChange("entityType", opt)} />
@@ -156,7 +162,7 @@ export default function BusinessForm({ next, formData, setFormData }) {
 
       <div>
         <div style={sectionLabel}>Type of Business</div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px 28px" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px" }}>
           {businessOptions.map(opt => (
             <label key={opt} style={radioLabel}>
               <input type="radio" name="businessType" checked={b.businessType === opt} onChange={() => handleChange("businessType", opt)} />
@@ -168,21 +174,21 @@ export default function BusinessForm({ next, formData, setFormData }) {
 
       <FloatTextarea label="Product / Service Sold" field="productService" value={b.productService} onChange={handleChange} required={R} submitAttempted={submitAttempted} />
 
-      <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 14, color: "#9EAAA8", lineHeight: 1.65, margin: 0 }}>
+      <p style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 14, color: "#9EAAA8", lineHeight: 1.65, margin: 0 }}>
         By submitting this application you certify that all information provided is true and correct.
       </p>
 
-      <div style={{ border: "1.5px solid #E0E6E5", borderRadius: 8, padding: "14px 16px", background: "#F7FAFA" }}>
+      <div style={{ border: "1.5px solid #E0E6E5", borderRadius: 8, padding: "16px 18px", background: "#F7FAFA" }}>
         <button type="button" onClick={() => setSmsExpanded(!smsExpanded)} style={{
           display: "flex", alignItems: "center", justifyContent: "space-between",
           width: "100%", background: "none", border: "none", cursor: "pointer",
-          fontFamily: "'Outfit', sans-serif", fontSize: 14, fontWeight: 500, color: "#195455", padding: 0,
+          fontFamily: "'Commuters Sans', sans-serif", fontSize: 14, fontWeight: 500, color: "#195455", padding: 0,
         }}>
           <span>SMS &amp; Text Message Consent</span>
           <span style={{ fontSize: 18, lineHeight: 1, transform: smsExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s ease" }}>⌄</span>
         </button>
         {smsExpanded && (
-          <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13.5, color: "#648F89", lineHeight: 1.7, margin: "12px 0 0" }}>
+          <p style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 13.5, color: "#648F89", lineHeight: 1.7, margin: "12px 0 0" }}>
             By providing your phone number, you agree to receive text messages (e.g., payment reminders)
             from Seacap at the cell number used when signing up. Consent is not a condition of any purchase.
             Reply STOP to unsubscribe, HELP for help. Message &amp; data rates may apply. Message frequency varies.
@@ -190,7 +196,7 @@ export default function BusinessForm({ next, formData, setFormData }) {
         )}
       </div>
 
-      <label style={{ display: "flex", alignItems: "flex-start", gap: 11, fontFamily: "'Outfit', sans-serif", fontSize: 15, color: "#3D5453", cursor: "pointer", lineHeight: 1.55 }}>
+      <label style={{ display: "flex", alignItems: "flex-start", gap: 11, fontFamily: "'Commuters Sans', sans-serif", fontSize: 15, color: "#3D5453", cursor: "pointer", lineHeight: 1.55 }}>
         <input type="checkbox" style={{ marginTop: 2, cursor: "pointer", flexShrink: 0 }}
           checked={agreed} onChange={e => handleChange("agreed", e.target.checked)} />
         I agree to the{" "}
@@ -198,12 +204,12 @@ export default function BusinessForm({ next, formData, setFormData }) {
       </label>
 
       {submitAttempted && !isFormValid() && (
-        <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13.5, color: "#C0392B", fontWeight: 500, margin: 0 }}>
+        <p style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 13.5, color: "#C0392B", fontWeight: 500, margin: 0 }}>
           Please fill in all required fields and agree to the terms before continuing.
         </p>
       )}
 
-      <div style={{ paddingTop: 4 }}>
+      <div style={{ paddingTop: 8 }}>
         <button className="btn-primary" onClick={handleNext}>Next →</button>
       </div>
 

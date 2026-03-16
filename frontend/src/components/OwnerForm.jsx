@@ -1,8 +1,6 @@
 import { useState } from "react"
 
-const REQUIRED = [
-  
-]
+const REQUIRED = []
 
 function formatPhone(val) {
   const d = val.replace(/\D/g, "").slice(0, 10)
@@ -112,9 +110,9 @@ export default function OwnerForm({ next, back, formData, setFormData }) {
   const R = true
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-      <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+      <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
 
         <FloatInput label="Corporate Officer / Owner Name" field="name" value={o.name} onChange={handleChange} required={R} submitAttempted={submitAttempted} />
         <FloatSelect label="Title" field="title" value={o.title} onChange={handleChange} options={titleOptions} required={R} submitAttempted={submitAttempted} />
@@ -122,7 +120,7 @@ export default function OwnerForm({ next, back, formData, setFormData }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <FloatInput label="Ownership %" field="ownership" value={o.ownership} onChange={handleChange} type="number" required={R} submitAttempted={submitAttempted} />
           {showPartnerHint && (
-            <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "'Outfit', sans-serif", fontSize: 13, color: "#195455", fontWeight: 500 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "'Commuters Sans', sans-serif", fontSize: 13, color: "#195455", fontWeight: 500 }}>
               <span>ℹ️</span> Under 51% — partner information will be required.
             </div>
           )}
@@ -144,7 +142,7 @@ export default function OwnerForm({ next, back, formData, setFormData }) {
       </div>
 
       {submitAttempted && !isFormValid() && (
-        <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13.5, color: "#C0392B", fontWeight: 500, margin: 0 }}>
+        <p style={{ fontFamily: "'Commuters Sans', sans-serif", fontSize: 13.5, color: "#C0392B", fontWeight: 500, margin: 0 }}>
           Please fill in all required fields before continuing.
         </p>
       )}
