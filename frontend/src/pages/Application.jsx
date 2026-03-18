@@ -282,7 +282,7 @@ export default function Application() {
         </div>
       </header>
 
-      <main className="app-main" style={{ flex: 1, maxWidth: 780, width: "100%", margin: "0 auto" }}>
+      <main className="app-main" style={{ flex: 1, maxWidth: 680, width: "100%", margin: "0 auto" }}>
 
         {!hideChrome && (
           <>
